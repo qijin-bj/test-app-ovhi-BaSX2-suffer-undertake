@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/created-by: application-service
+    app.kubernetes.io/instance: test-component-wesp
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: test-component-wesp
+    app.kubernetes.io/part-of: test-app-ovhi
+  name: test-component-wesp
+  namespace: build-e2e-hacbs-cvkz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: test-component-wesp
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: test-component-wesp
+    spec:
+      containers:
+      - image: quay.io/redhat-appstudio-qe/test-images:6c54376cfe034152b37e3d43f6ba896d
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        name: container-image
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          tcpSocket:
+            port: 8081
+        resources: {}
+status: {}
